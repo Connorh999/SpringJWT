@@ -1,0 +1,21 @@
+# mac
+.DS_Store
+
+# npm stuff
+node_modules
+build
+
+# eclipse
+.classpath
+.project
+.settings/
+/bin
+
+# intellij
+.idea/
+*.iml
+
+# misc
+*.log*
+.gradle
+out
