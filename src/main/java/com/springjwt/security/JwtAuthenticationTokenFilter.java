@@ -19,8 +19,6 @@ import com.springjwt.security.util.JwtTokenUtils;
 import com.springjwt.service.impl.UserAuthenticationService;
 
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-
-	//Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private UserAuthenticationService userAuthService;
@@ -39,14 +37,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 		//token = token.substring(7);
 		String email = tokenUtils.getEmailFromToken(token);
 		
-		//logger.info("Checking authentication for user: " + email);
 		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userAuthService.loadUserByUsername(email);
 			if (tokenUtils.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken auth = 
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				//logger.info("Authentication user: " + email + "; setting security context.");
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 		}

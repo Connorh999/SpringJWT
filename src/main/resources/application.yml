@@ -1,8 +1,9 @@
 jwt:
   header: Authorization
-  secret: Harambe
+  secret: HARAMBE
   expiration: 604800
   route:
     authentication:
       path: auth
+      login: login
       refresh: refresh

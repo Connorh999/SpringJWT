@@ -17,7 +17,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtils {
-
+	
 	private final String AUDIENCE_UNKNOWN = "unknown";
 	private final String AUDIENCE_WEB = "web";
 	private final String AUDIENCE_MOBILE = "mobile";
@@ -138,7 +138,7 @@ public class JwtTokenUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("sub", userDetails.getUsername());
 		claims.put("aud", generateAudience(device));
-		claims.put("created", new Date());
+		claims.put("scopes", userDetails.getAuthorities());
 		
 		return generateToken(claims);
 	}
@@ -146,6 +146,7 @@ public class JwtTokenUtils {
 	private String generateToken(Map<String, Object> claims) {
 		return Jwts.builder()
 				.setClaims(claims)
+				.setIssuedAt(new Date())
 				.setExpiration(generateExpirationDate())
 				.signWith(SignatureAlgorithm.HS512, secret)
 				.compact();

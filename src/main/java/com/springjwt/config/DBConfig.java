@@ -56,7 +56,7 @@ public class DBConfig {
 		LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
 		bean.setDataSource(dataSource());
 		bean.setHibernateProperties(hibernateProperties());
-		bean.setPackagesToScan("com.springjwt.models");
+		bean.setPackagesToScan("com.springjwt.model");
 		bean.afterPropertiesSet();
 		
 		return bean.getObject();
