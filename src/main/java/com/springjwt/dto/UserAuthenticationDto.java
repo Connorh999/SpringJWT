@@ -15,6 +15,8 @@ import com.springjwt.model.User;
 
 public class UserAuthenticationDto implements UserDetails {
 
+	private static final long serialVersionUID = -1145191613693241487L;
+	
 	private int id;
 	private String email;
 	private String password;

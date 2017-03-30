@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * The role entity for users.
+ * The authority entity for users.
  * 
  * @author Connor Hanson
  * @since 2/26/17

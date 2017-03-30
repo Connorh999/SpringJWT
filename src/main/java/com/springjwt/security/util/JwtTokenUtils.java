@@ -1,11 +1,15 @@
 package com.springjwt.security.util;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +51,7 @@ public class JwtTokenUtils {
 		
 		try {
 			final Claims claims = getClaimsFromToken(token);
-			created = new Date((long) claims.get("created"));
+			created = new Date((Integer) claims.get("iat"));
 		} catch (Exception e) {
 			created = null;
 		}
@@ -138,7 +142,7 @@ public class JwtTokenUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("sub", userDetails.getUsername());
 		claims.put("aud", generateAudience(device));
-		claims.put("scopes", userDetails.getAuthorities());
+		claims.put("scopes", prepareAuthorities(userDetails.getAuthorities()));
 		
 		return generateToken(claims);
 	}
@@ -152,6 +156,12 @@ public class JwtTokenUtils {
 				.compact();
 	}
 	
+	private Set<String> prepareAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		return authorities.stream()
+				.map(auth -> auth.getAuthority())
+				.collect(Collectors.toSet());
+	}
+	
 	public boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
 		final Date created = getCreatedDateFromToken(token);
 		return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
@@ -163,7 +173,6 @@ public class JwtTokenUtils {
 		
 		try {
 			final Claims claims = getClaimsFromToken(token);
-			claims.put("created", new Date());
 			refreshed = generateToken(claims);
 		} catch (Exception e) {
 			refreshed = null;
